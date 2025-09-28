@@ -40,3 +40,17 @@ export interface IMusicGenerationService extends EventTarget {
   stop(): void;
   setWeightedPrompts(prompts: Map<string, Prompt>): void;
 }
+
+// This is a stripped down version of the original LiveMusicHelper that
+// was causing issues with the live content.
+// TODO: remove this and use the version from the SDK once it's fixed.
+declare module '@google/genai' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface WeightedPrompt {}
+  interface WeightedPromptRequest {
+    weightedPrompts: WeightedPrompt[];
+  }
+  interface LiveMusicSession {
+    setWeightedPrompts(request: WeightedPromptRequest): Promise<void>;
+  }
+}

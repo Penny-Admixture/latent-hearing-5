@@ -14,6 +14,7 @@ import type { Prompt, ControlChange } from '../types';
 
 /** A single prompt input associated with a MIDI CC. */
 @customElement('prompt-controller')
+// FIX: The class must extend LitElement to be a custom element.
 export class PromptController extends LitElement {
   static override styles = css`
     .prompt {

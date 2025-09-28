@@ -14,6 +14,7 @@ import { LiveMusicHelper } from './utils/LiveMusicHelper';
 import { SunoMusicHelper } from './utils/SunoMusicHelper';
 import { UdioMusicHelper } from './utils/UdioMusicHelper';
 import { AudioAnalyser } from './utils/AudioAnalyser';
+import { AudioGuideHelper } from './utils/AudioGuideHelper';
 import { PRESET_A } from './presets';
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -45,6 +46,8 @@ function main() {
 
   const toastMessage = new ToastMessage();
   document.body.appendChild(toastMessage);
+
+  const audioGuideHelper = new AudioGuideHelper(new AudioContext());
 
   let musicService: IMusicGenerationService = new LiveMusicHelper(ai, lyriaModel);
   let audioAnalyser = new AudioAnalyser(musicService.audioContext);
@@ -99,7 +102,16 @@ function main() {
     musicService.setWeightedPrompts(customEvent.detail);
   });
 
-  pdjMidi.addEventListener('play-pause', () => musicService.playPause());
+  pdjMidi.addEventListener('play-pause', () => {
+    musicService.playPause();
+
+    const isPlayingOrLoading = pdjMidi.playbackState === 'playing' || pdjMidi.playbackState === 'loading';
+    if (isPlayingOrLoading) {
+      audioGuideHelper.stop();
+    } else {
+      audioGuideHelper.play();
+    }
+  });
 
   pdjMidi.addEventListener('error', (e: Event) => {
     const customEvent = e as CustomEvent<string>;
@@ -109,6 +121,35 @@ function main() {
   pdjMidi.addEventListener('music-service-changed', (e: Event) => {
     const customEvent = e as CustomEvent<MusicServiceId>;
     switchMusicService(customEvent.detail);
+  });
+
+  pdjMidi.addEventListener('guide-track-loaded', async (e: Event) => {
+    const customEvent = e as CustomEvent<File>;
+    const file = customEvent.detail;
+    pdjMidi.guideTrackInfo = `Loading ${file.name}...`;
+    try {
+        await audioGuideHelper.loadFile(file);
+        pdjMidi.guideTrackInfo = `${file.name} (${audioGuideHelper.bpm} BPM)`;
+    } catch (err) {
+        const message = `Error processing audio file: ${(err as Error).message}`;
+        toastMessage.show(message);
+        pdjMidi.guideTrackInfo = 'None';
+    }
+  });
+
+  audioGuideHelper.addEventListener('beat', (e: Event) => {
+    const customEvent = e as CustomEvent<{ beat: number }>;
+    const { beat } = customEvent.detail;
+
+    // On the first beat of a measure, 50% chance to trigger an action
+    if (beat === 1 && Math.random() < 0.5) {
+        // 50/50 chance between two actions
+        if (Math.random() < 0.5) {
+            pdjMidi.handleCategoryTheory();
+        } else {
+            pdjMidi.handleSparse();
+        }
+    }
   });
 
   audioAnalyser.addEventListener('audio-level-changed', (e: Event) => {
@@ -128,17 +169,3 @@ function main() {
 }
 
 main();
-
-// This is a stripped down version of the original LiveMusicHelper that
-// was causing issues with the live content.
-// TODO: remove this and use the version from the SDK once it's fixed.
-declare module '@google/genai' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface WeightedPrompt {}
-  interface WeightedPromptRequest {
-    weightedPrompts: WeightedPrompt[];
-  }
-  interface LiveMusicSession {
-    setWeightedPrompts(request: WeightedPromptRequest): Promise<void>;
-  }
-}

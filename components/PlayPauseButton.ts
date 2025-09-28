@@ -1,4 +1,5 @@
 
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -8,6 +9,7 @@ import { customElement, property } from 'lit/decorators.js';
 import type { PlaybackState } from '../types';
 
 @customElement('play-pause-button')
+// FIX: The class must extend LitElement to be a custom element.
 export class PlayPauseButton extends LitElement {
 
   @property({ type: String }) playbackState: PlaybackState = 'stopped';

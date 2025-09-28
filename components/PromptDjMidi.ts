@@ -1,7 +1,5 @@
 
 
-
-
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -25,6 +23,7 @@ const SCRIPT_MEASURE_DURATION_MS = 2000; // 1 measure = 2 seconds
 
 /** The grid of prompt inputs. */
 @customElement('prompt-dj-midi')
+// FIX: The class must extend LitElement to be a custom element.
 export class PromptDjMidi extends LitElement {
   static override styles = css`
     :host {
@@ -115,6 +114,21 @@ export class PromptDjMidi extends LitElement {
       box-sizing: border-box;
       border: 1px solid var(--container-border);
       flex-shrink: 0;
+    }
+    #guide-track-display {
+      color: var(--primary-fg-dim);
+      font-size: 1.4vmin;
+      text-align: center;
+      padding: 0.5vmin;
+      background: var(--bg-color-translucent);
+      border-radius: 6px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid var(--container-border);
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     #buttons, #presets {
       display: grid;
@@ -248,9 +262,11 @@ export class PromptDjMidi extends LitElement {
   @state() private musicService: MusicServiceId = 'lyria';
   @state() private activeTheme: ThemeId = 'navy-olive';
   @state() private version = 'latent_hearing_build_20250816_5';
+  @state() public guideTrackInfo = 'None';
 
 
   @query('#file-loader') private fileInput!: HTMLInputElement;
+  @query('#guide-track-loader') private guideTrackLoader!: HTMLInputElement;
   @query('#waveform-canvas') private waveformCanvas!: HTMLCanvasElement;
 
 
@@ -474,6 +490,24 @@ export class PromptDjMidi extends LitElement {
     this.fileInput.click();
   }
 
+  private triggerGuideTrackLoad() {
+    this.guideTrackLoader.click();
+  }
+
+  private handleGuideTrackFileChange(e: Event) {
+    const input = e.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.dispatchEvent(new CustomEvent('guide-track-loaded', {
+        detail: file,
+        bubbles: true,
+        composed: true,
+    }));
+    // Reset input to allow loading the same file again
+    input.value = '';
+  }
+
   private handlePresetClick(presetPrompts: string[]) {
     const inactivePrompts = [...this.prompts.values()].filter(p => p.weight === 0);
     if (inactivePrompts.length === 0) {
@@ -680,7 +714,7 @@ export class PromptDjMidi extends LitElement {
     this.autoSaveThrottled();
   }
 
-  private handleSparse() {
+  public handleSparse() {
     const activePrompts = [...this.prompts.values()].filter(p => p.weight > 0);
     
     // Shuffle the active prompts
@@ -731,7 +765,7 @@ export class PromptDjMidi extends LitElement {
     return `${this.capitalize(word1)} ${this.capitalize(word2)}`;
   }
 
-  private handleCategoryTheory() {
+  public handleCategoryTheory() {
     const activePrompts = [...this.prompts.values()].filter(p => p.weight > 0);
 
     // Shuffle active prompts to randomize which ones are changed
@@ -1022,25 +1056,27 @@ export class PromptDjMidi extends LitElement {
           <button style="--animation-order: 3" @click=${this.handleSave}>Save</button>
           <button style="--animation-order: 4" @click=${this.triggerLoad}>Load</button>
           <input id="file-loader" type="file" accept=".json" style="display: none;" @change=${this.handleLoad}>
+          <button style="--animation-order: 5" @click=${this.triggerGuideTrackLoad}>Guide Track</button>
+          <input id="guide-track-loader" type="file" accept=".mp3,.wav,.flac" style="display: none;" @change=${this.handleGuideTrackFileChange}>
           
-          <button style="--animation-order: 5" @click=${this.handleReverse}>Reverse</button>
-          <button style="--animation-order: 6" @click=${this.handleScramble}>Scramble</button>
+          <button style="--animation-order: 6" @click=${this.handleReverse}>Reverse</button>
+          <button style="--animation-order: 7" @click=${this.handleScramble}>Scramble</button>
           <button 
-            style="--animation-order: 7"
+            style="--animation-order: 8"
             @click=${this.toggleScriptEditor}
             class=${this.showScriptEditor ? 'active' : ''}
           >Script</button>
-          <button style="--animation-order: 8" @click=${this.handleRandomize}>Randomize</button>
-          <button style="--animation-order: 9" @click=${this.handleRandom2}>Random2</button>
-          <button style="--animation-order: 10" @click=${this.handleSparse}>Sparse</button>
-          <button style="--animation-order: 11" @click=${this.handleCategoryTheory}>Category Theory</button>
-          <button style="--animation-order: 12" @click=${this.toggleGlitchMode} class=${this.isGlitchModeActive ? 'active' : ''}>Glitch</button>
-          <button style="--animation-order: 13" @click=${() => this.toggleDriftMode('normal')} class=${this.driftMode === 'normal' ? 'active' : ''}>Drift</button>
-          <button style="--animation-order: 14" @click=${() => this.toggleDriftMode('fast')} class=${this.driftMode === 'fast' ? 'active' : ''}>DriftFast</button>
-          <button style="--animation-order: 15" @click=${() => this.toggleDriftMode('slow')} class=${this.driftMode === 'slow' ? 'active' : ''}>DriftSlow</button>
+          <button style="--animation-order: 9" @click=${this.handleRandomize}>Randomize</button>
+          <button style="--animation-order: 10" @click=${this.handleRandom2}>Random2</button>
+          <button style="--animation-order: 11" @click=${this.handleSparse}>Sparse</button>
+          <button style="--animation-order: 12" @click=${this.handleCategoryTheory}>Category Theory</button>
+          <button style="--animation-order: 13" @click=${this.toggleGlitchMode} class=${this.isGlitchModeActive ? 'active' : ''}>Glitch</button>
+          <button style="--animation-order: 14" @click=${() => this.toggleDriftMode('normal')} class=${this.driftMode === 'normal' ? 'active' : ''}>Drift</button>
+          <button style="--animation-order: 15" @click=${() => this.toggleDriftMode('fast')} class=${this.driftMode === 'fast' ? 'active' : ''}>DriftFast</button>
+          <button style="--animation-order: 16" @click=${() => this.toggleDriftMode('slow')} class=${this.driftMode === 'slow' ? 'active' : ''}>DriftSlow</button>
           
           ${this.showMidi ? html`<select
-            style="--animation-order: 16"
+            style="--animation-order: 17"
             @change=${this.handleMidiInputChange}
             .value=${this.activeMidiInputId || ''}>
             ${this.midiInputIds.length > 0
@@ -1053,7 +1089,7 @@ export class PromptDjMidi extends LitElement {
           : html`<option value="">No devices found</option>`}
           </select>` : ''}
           <select
-            style="--animation-order: 17"
+            style="--animation-order: 18"
             @change=${this.handleMusicServiceChange}
             .value=${this.musicService}
             title="Select Music Generation Service"
@@ -1062,7 +1098,7 @@ export class PromptDjMidi extends LitElement {
             <option value="suno">Suno</option>
             <option value="udio">Udio</option>
           </select>
-          <select style="--animation-order: 18" @change=${this.handleThemeChange} title="Select Theme">
+          <select style="--animation-order: 19" @change=${this.handleThemeChange} title="Select Theme">
             ${Object.entries(THEMES).map(([id, theme]) => html`<option value=${id} ?selected=${id === this.activeTheme}>${theme.name}</option>`)}
           </select>
         </div>
@@ -1074,6 +1110,7 @@ export class PromptDjMidi extends LitElement {
           <button @click=${() => this.handlePresetClick(PRESET_E)}>E</button>
           <button @click=${() => this.handlePresetClick(PRESET_F)}>F</button>
         </div>
+        <div id="guide-track-display">Guide: ${this.guideTrackInfo}</div>
       </div>
       <div id="main-content">
         <div id="grid">${this.renderPrompts()}</div>
