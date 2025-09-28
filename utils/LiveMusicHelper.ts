@@ -7,13 +7,23 @@ import type { AudioChunk, GoogleGenAI, LiveMusicFilteredPrompt, LiveMusicServerM
 import { decode, decodeAudioData } from './audio';
 import { throttle } from './throttle';
 
+// FIX: Patched types to augment LiveMusicSession without global module declaration
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface WeightedPrompt {}
+interface WeightedPromptRequest {
+  weightedPrompts: WeightedPrompt[];
+}
+interface PatchedLiveMusicSession extends LiveMusicSession {
+  setWeightedPrompts(request: WeightedPromptRequest): Promise<void>;
+}
+
 export class LiveMusicHelper extends EventTarget implements IMusicGenerationService {
 
   private ai: GoogleGenAI;
   private model: string;
 
-  private session: LiveMusicSession | null = null;
-  private sessionPromise: Promise<LiveMusicSession> | null = null;
+  private session: PatchedLiveMusicSession | null = null;
+  private sessionPromise: Promise<PatchedLiveMusicSession> | null = null;
 
   private connectionError = true;
 
@@ -38,12 +48,13 @@ export class LiveMusicHelper extends EventTarget implements IMusicGenerationServ
     this.outputNode = this.audioContext.createGain();
   }
 
-  private getSession(): Promise<LiveMusicSession> {
+  private getSession(): Promise<PatchedLiveMusicSession> {
     if (!this.sessionPromise) this.sessionPromise = this.connect();
     return this.sessionPromise;
   }
 
-  private async connect(): Promise<LiveMusicSession> {
+  private async connect(): Promise<PatchedLiveMusicSession> {
+    // FIX: Cast the result to our patched session type.
     this.sessionPromise = this.ai.live.music.connect({
       model: this.model,
       callbacks: {
@@ -70,7 +81,7 @@ export class LiveMusicHelper extends EventTarget implements IMusicGenerationServ
           this.dispatchEvent(new CustomEvent('error', { detail: 'Connection error, please restart audio.' }));
         },
       },
-    });
+    }) as Promise<PatchedLiveMusicSession>;
     return this.sessionPromise;
   }
 

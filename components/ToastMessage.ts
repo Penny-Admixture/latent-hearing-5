@@ -1,5 +1,3 @@
-
-
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -9,7 +7,6 @@ import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 
 @customElement('toast-message')
-// FIX: The class must extend LitElement to be a custom element.
 export class ToastMessage extends LitElement {
   static override styles = css`
     .toast {

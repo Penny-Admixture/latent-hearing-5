@@ -1,5 +1,3 @@
-
-
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -10,7 +8,6 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 /** A knob for adjusting and visualizing prompt weight. */
 @customElement('weight-knob')
-// FIX: The class must extend LitElement to be a custom element.
 export class WeightKnob extends LitElement {
   static override styles = css`
     :host {

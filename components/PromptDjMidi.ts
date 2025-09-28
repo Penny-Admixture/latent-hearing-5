@@ -1,5 +1,3 @@
-
-
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -23,7 +21,6 @@ const SCRIPT_MEASURE_DURATION_MS = 2000; // 1 measure = 2 seconds
 
 /** The grid of prompt inputs. */
 @customElement('prompt-dj-midi')
-// FIX: The class must extend LitElement to be a custom element.
 export class PromptDjMidi extends LitElement {
   static override styles = css`
     :host {
@@ -1056,7 +1053,7 @@ export class PromptDjMidi extends LitElement {
           <button style="--animation-order: 3" @click=${this.handleSave}>Save</button>
           <button style="--animation-order: 4" @click=${this.triggerLoad}>Load</button>
           <input id="file-loader" type="file" accept=".json" style="display: none;" @change=${this.handleLoad}>
-          <button style="--animation-order: 5" @click=${this.triggerGuideTrackLoad}>Guide Track</button>
+          <button style="--animation-order: 5" @click=${this.triggerGuideTrackLoad}>Upload Track</button>
           <input id="guide-track-loader" type="file" accept=".mp3,.wav,.flac" style="display: none;" @change=${this.handleGuideTrackFileChange}>
           
           <button style="--animation-order: 6" @click=${this.handleReverse}>Reverse</button>
