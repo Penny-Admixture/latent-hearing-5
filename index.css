@@ -1,0 +1,267 @@
+
+
+:root, body.theme-metallic {
+  --bg-color: #000000;
+  --bg-color-translucent: rgba(0, 0, 0, 0.4);
+  --primary-bg-translucent: rgba(10, 10, 12, 0.85);
+  --primary-fg: #e0e0e0;
+  --primary-fg-dim: #aaa;
+  --accent-color: #ffab00;
+  --version-color: #ffab00;
+  --version-glow: #ffab0033;
+  --container-border: rgba(255, 255, 255, 0.15);
+  --button-fg: #e0e0e0;
+  --button-bg: linear-gradient(145deg, #2e2e2e, #1a1a1a);
+  --button-border: #444;
+  --button-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1);
+  --button-hover-bg: linear-gradient(145deg, #3a3a3a, #222222);
+  --button-hover-border: #888;
+  --button-active-fg: #000;
+  --button-active-bg: linear-gradient(145deg, #f0f0f0, #c0c0c0);
+  --button-active-border: #fff;
+  --button-active-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.4);
+  --input-bg: #111;
+  --input-fg: #eee;
+  --input-border: #444;
+  --input-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+  --knob-metal-stop-1: #555;
+  --knob-metal-stop-2: #333;
+  --knob-metal-stop-3: #444;
+  --knob-bezel-stop-1: #666;
+  --knob-bezel-stop-2: #222;
+  --play-pause-icon-fill: #e0e0e0;
+}
+
+body.theme-navy-gold {
+  --bg-color: #0a192f;
+  --bg-color-translucent: rgba(10, 25, 47, 0.4);
+  --primary-bg-translucent: rgba(10, 25, 47, 0.85);
+  --primary-fg: #9FB176; /* Muted Olive Green */
+  --primary-fg-dim: #798a5b;
+  --accent-color: #FFD700; /* Gold */
+  --version-color: var(--accent-color);
+  --version-glow: #ffd70033;
+  --container-border: rgba(255, 215, 0, 0.2);
+  --button-fg: var(--primary-fg);
+  --button-bg: transparent;
+  --button-border: #445876;
+  --button-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  --button-hover-bg: rgba(159, 177, 118, 0.1);
+  --button-hover-border: var(--primary-fg);
+  --button-active-fg: #0a192f;
+  --button-active-bg: var(--primary-fg);
+  --button-active-border: var(--primary-fg);
+  --button-active-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.4);
+  --input-bg: #1d2d44;
+  --input-fg: #e0e0e0;
+  --input-border: #445876;
+  --input-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+  --knob-metal-stop-1: #4a5c72;
+  --knob-metal-stop-2: #1d2d44;
+  --knob-metal-stop-3: #2a3c52;
+  --knob-bezel-stop-1: #6a7c92;
+  --knob-bezel-stop-2: #0a192f;
+  --play-pause-icon-fill: var(--primary-fg);
+}
+
+.theme-navy-gold button::after, 
+.theme-navy-gold select::after,
+.theme-navy-gold play-pause-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.4), transparent);
+  transform: translateX(-150%) skewX(-30deg);
+  animation: glitter-sweep 5s linear infinite;
+  animation-delay: calc(var(--animation-order, 1) * 200ms);
+  pointer-events: none;
+}
+
+@keyframes glitter-sweep {
+    0% {
+        transform: translateX(-150%) skewX(-30deg);
+    }
+    100% {
+        transform: translateX(800%) skewX(-30deg);
+    }
+}
+
+body.theme-navy-olive {
+  --bg-color: #000000;
+  --bg-color-translucent: rgba(18, 18, 18, 0.6);
+  --primary-bg-translucent: transparent;
+  --primary-fg: #d2b48c; /* Tan */
+  --primary-fg-dim: #a08a6c;
+  --accent-color: #2e4636; /* Dark, desaturated green */
+  --version-color: var(--accent-color);
+  --version-glow: rgba(46, 70, 54, 0.3);
+  --container-border: rgba(160, 138, 108, 0.4); /* primary-fg-dim with alpha */
+  --button-fg: var(--primary-fg);
+  --button-bg: rgba(42, 34, 24, 0.6); /* Dark wood/leather translucent */
+  --button-border: var(--container-border);
+  --button-shadow: 0 2px 4px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05);
+  --button-hover-bg: rgba(62, 50, 40, 0.7);
+  --button-hover-border: var(--primary-fg);
+  --button-active-fg: #fff;
+  --button-active-bg: var(--accent-color);
+  --button-active-border: #4e6656;
+  --button-active-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.4);
+  --input-bg: rgba(42, 34, 24, 0.8);
+  --input-fg: var(--primary-fg);
+  --input-border: var(--container-border);
+  --input-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+  --knob-metal-stop-1: #4a4a4a;
+  --knob-metal-stop-2: #2a2a2a;
+  --knob-metal-stop-3: #3a3a3a;
+  --knob-bezel-stop-1: #5a5a5a;
+  --knob-bezel-stop-2: #1a1a1a;
+  --play-pause-icon-fill: var(--primary-fg);
+}
+
+body.theme-navy-olive #background {
+  background-image: none !important;
+}
+
+body.theme-maroon-gold {
+  --bg-color: #4d0000;
+  --bg-color-translucent: rgba(77, 0, 0, 0.4);
+  --primary-bg-translucent: rgba(43, 0, 0, 0.85);
+  --primary-fg: #f5e6c4;
+  --primary-fg-dim: #c1b49c;
+  --accent-color: #ffd700;
+  --version-color: #ffd700;
+  --version-glow: #ffd70033;
+  --container-border: rgba(255, 215, 0, 0.25);
+  --button-fg: #2b0000;
+  --button-bg: linear-gradient(145deg, #b08d57, #8c6d3e);
+  --button-border: #d4af37;
+  --button-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.2);
+  --button-hover-bg: linear-gradient(145deg, #c09d67, #9c7d4e);
+  --button-hover-border: #ffdf87;
+  --button-active-fg: #4d0000;
+  --button-active-bg: linear-gradient(145deg, #fff8e7, #e0d0b0);
+  --button-active-border: #fff;
+  --button-active-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.4);
+  --input-bg: #6c2020;
+  --input-fg: #f5e6c4;
+  --input-border: #8c6d3e;
+  --input-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+  --knob-metal-stop-1: #a07d47;
+  --knob-metal-stop-2: #7c5d2e;
+  --knob-metal-stop-3: #8c6d3e;
+  --knob-bezel-stop-1: #d4af37;
+  --knob-bezel-stop-2: #6c4d1e;
+  --play-pause-icon-fill: #f5e6c4;
+}
+
+body.theme-periwinkle-lime {
+  --bg-color: #c4c8e1;
+  --bg-color-translucent: rgba(196, 200, 225, 0.4);
+  --primary-bg-translucent: rgba(200, 205, 230, 0.85);
+  --primary-fg: #003000;
+  --primary-fg-dim: #005000;
+  --accent-color: #00ff00;
+  --version-color: #008080;
+  --version-glow: #00ffff33;
+  --container-border: rgba(0, 255, 0, 0.3);
+  --button-fg: #002000;
+  --button-bg: linear-gradient(145deg, #8eff8e, #50ff50);
+  --button-border: #00ff00;
+  --button-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.5);
+  --button-hover-bg: linear-gradient(145deg, #a0ffa0, #70ff70);
+  --button-hover-border: #adff2f;
+  --button-active-fg: #000;
+  --button-active-bg: linear-gradient(145deg, #00ffff, #00d0d0);
+  --button-active-border: #00ffff;
+  --button-active-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.4);
+  --input-bg: rgba(230, 235, 255, 0.9);
+  --input-fg: #003000;
+  --input-border: #00ff00;
+  --input-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  --knob-metal-stop-1: #e0e4f5;
+  --knob-metal-stop-2: #b0b4c5;
+  --knob-metal-stop-3: #c4c8e1;
+  --knob-bezel-stop-1: #f0f4ff;
+  --knob-bezel-stop-2: #a0a4b5;
+  --play-pause-icon-fill: #003000;
+}
+
+body.theme-gray-pink {
+  --bg-color: #1a1a1d;
+  --bg-color-translucent: rgba(26, 26, 29, 0.4);
+  --primary-bg-translucent: rgba(15, 15, 18, 0.85);
+  --primary-fg: #e0e0e0;
+  --primary-fg-dim: #999;
+  --accent-color: #f0f;
+  --version-color: #f0f;
+  --version-glow: #ff00ff33;
+  --container-border: rgba(255, 0, 255, 0.25);
+  --button-fg: #fff;
+  --button-bg: linear-gradient(145deg, #4b0076, #3a005a);
+  --button-border: #f0f;
+  --button-shadow: 0 2px 4px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.1);
+  --button-hover-bg: linear-gradient(145deg, #5c108a, #4a106a);
+  --button-hover-border: #ff80ff;
+  --button-active-fg: #fff;
+  --button-active-bg: linear-gradient(145deg, #007fff, #005fcc);
+  --button-active-border: #00bfff;
+  --button-active-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.4);
+  --input-bg: #2a2a2d;
+  --input-fg: #eee;
+  --input-border: #444;
+  --input-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+  --knob-metal-stop-1: #4a4a4d;
+  --knob-metal-stop-2: #2a2a2d;
+  --knob-metal-stop-3: #3a3a3d;
+  --knob-bezel-stop-1: #5a5a5d;
+  --knob-bezel-stop-2: #1a1a1d;
+  --play-pause-icon-fill: #e0e0e0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  height: 100vh;
+  background: transparent;
+  background-color: var(--bg-color);
+  transition: background-color 0.3s ease;
+}
+
+body.glitch-active {
+  animation: glitch-bg 0.2s infinite;
+}
+
+@keyframes glitch-bg {
+  0% { background-color: var(--bg-color); }
+  25% { background-color: #300; }
+  50% { background-color: #030; }
+  75% { background-color: #003; }
+  100% { background-color: var(--bg-color); }
+}
+
+body.dragging {
+  cursor: ns-resize;
+}
+body.dragging * {
+  user-select: none;
+  pointer-events: none;
+}
+
+#app-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
